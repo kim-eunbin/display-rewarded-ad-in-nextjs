@@ -1,26 +1,49 @@
-html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  padding-top: 300px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.modal[data-type] {
+  display: block;
 }
 
-* {
-  box-sizing: border-box;
+.modalDialog {
+  margin: auto;
+  padding: 25px;
+  background-color: white;
+  text-align: center;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.grantButtons,
+.rewardButtons {
+  display: none;
+}
+
+.modal[data-type="grant"] .grantButtons,
+.modal[data-type="reward"] .rewardButtons {
+  display: block;
+}
+
+.modal input[type="button"] {
+  padding: 0.5rem;
+  background: blue;
+  border: none;
+  border-radius: 4px;
+  margin: 4px;
+  color: white;
+}
+
+#modalMessage {
+  color: black;
 }
