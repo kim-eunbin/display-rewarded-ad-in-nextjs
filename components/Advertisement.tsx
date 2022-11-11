@@ -73,6 +73,13 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
     selectedChapter.current = chapterId;
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      const { googletag } = window;
+      googletag.pubads().refresh([rewardedAdRef.current]);
+    }, 2000);
+  });
+
   return (
     <>
       <h1>Display rewarded ad in nextJS</h1>
