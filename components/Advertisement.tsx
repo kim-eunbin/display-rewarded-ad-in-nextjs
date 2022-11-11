@@ -26,7 +26,7 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
           .addEventListener("rewardedSlotReady", function (event: any) {
             console.log("event in rewardedSlotReady", event);
             setIsLoading(false);
-            eventRef.current = event;
+            event.makeRewardedVisible();
           });
 
         googletag.pubads().addEventListener("rewardedSlotClosed", () => {
@@ -53,21 +53,17 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
     });
   };
 
-  const onClickChapter = (chapterId: number) => {
-    console.log("eventRef.current", eventRef.current, rewardedAdRef.current);
-    if (eventRef.current) {
-      eventRef.current.makeRewardedVisible();
-    }
-    selectedChapter.current = chapterId;
-  };
-
   useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       const { googletag } = window;
       console.log("refresh", googletag, rewardedAdRef.current);
 
       googletag.pubads().refresh([rewardedAdRef.current]);
     }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+    };
   });
 
   return (
