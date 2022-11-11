@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/router";
 import { NextPage } from "next";
 import Head from "next/head";
-import Ad from "../components/Advertisement";
 
 declare global {
   interface Window {
@@ -11,12 +10,7 @@ declare global {
 }
 
 const Home: NextPage = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  if (isLoading) {
-    return <>loading...</>;
-  }
-
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -29,7 +23,10 @@ const Home: NextPage = () => {
              googletag.cmd = googletag.cmd || [];`}
         </script>
       </Head>
-      <Ad setIsLoading={setIsLoading} />
+      <button onClick={() => router.push(`/chat/${1}`)}>1회차 클릭</button>
+      <button onClick={() => router.push(`/chat/${2}`)}>2회차 클릭</button>
+      <button onClick={() => router.push(`/chat/${3}`)}>3회차 클릭</button>
+      <button onClick={() => router.push(`/chat/${4}`)}>4회차 클릭</button>
     </>
   );
 };

@@ -4,8 +4,6 @@ import { useRouter } from "next/router";
 const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   const router = useRouter();
   const rewardedAdRef = useRef<any>();
-  const modalRef = useRef<any>();
-  const modalMessageRef = useRef<any>();
   const chapterButtonRef = useRef<HTMLButtonElement>();
   const selectedChapter = useRef<number>();
   const eventRef = useRef<any>();
@@ -32,33 +30,23 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
           });
 
         googletag.pubads().addEventListener("rewardedSlotClosed", () => {
-          console.log("rewardedAdRef", rewardedAdRef);
-          googletag.destroySlots([rewardedAdRef.current]);
+          removeSlot();
         });
 
         googletag
           .pubads()
           .addEventListener("rewardedSlotGranted", function (event: any) {
-            console.log("rewardedSlotGranted", event);
-            console.log("rewared", event.payload.amount, event.payload.type);
-
-            googletag.destroySlots([rewardedAdRef.current]);
-            router.push(`/chat/${selectedChapter.current}`);
+            removeSlot();
           });
 
         googletag.enableServices();
         googletag.display(rewardedAdRef.current);
       }
     });
-
-    router.events.on("routeChangeComplete", removeSlot);
-    return () => {
-      router.events.off("routeChangeComplete", removeSlot);
-    };
-  }, [router.events]);
+  }, []);
 
   const removeSlot = function () {
-    console.log("Remove slot");
+    console.log("removeSlot");
     const { googletag } = window;
     googletag.cmd.push(function () {
       googletag.destroySlots();
@@ -76,6 +64,8 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   useEffect(() => {
     setTimeout(() => {
       const { googletag } = window;
+      console.log("refresh", googletag, rewardedAdRef.current);
+
       googletag.pubads().refresh([rewardedAdRef.current]);
     }, 2000);
   });
@@ -83,18 +73,6 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   return (
     <>
       <h1>Display rewarded ad in nextJS</h1>
-      <button ref={chapterButtonRef} onClick={() => onClickChapter(1)}>
-        1회차 클릭
-      </button>
-      <button ref={chapterButtonRef} onClick={() => onClickChapter(2)}>
-        2회차 클릭
-      </button>
-      <button ref={chapterButtonRef} onClick={() => onClickChapter(3)}>
-        3회차 클릭
-      </button>
-      <button ref={chapterButtonRef} onClick={() => onClickChapter(4)}>
-        4회차 클릭
-      </button>
     </>
   );
 };
