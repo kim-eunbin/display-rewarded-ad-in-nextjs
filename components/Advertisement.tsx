@@ -26,22 +26,17 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
         googletag
           .pubads()
           .addEventListener("rewardedSlotReady", function (event: any) {
-            console.log("event in rewardedSlotReady", event);
             setIsLoading(false);
             eventRef.current = event;
           });
 
         googletag.pubads().addEventListener("rewardedSlotClosed", () => {
-          console.log("rewardedAdRef", rewardedAdRef);
           googletag.destroySlots([rewardedAdRef.current]);
         });
 
         googletag
           .pubads()
           .addEventListener("rewardedSlotGranted", function (event: any) {
-            console.log("rewardedSlotGranted", event);
-            console.log("rewared", event.payload.amount, event.payload.type);
-
             googletag.destroySlots([rewardedAdRef.current]);
             router.push(`/chat/${selectedChapter.current}`);
           });
@@ -58,7 +53,6 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   }, [router.events]);
 
   const removeSlot = function () {
-    console.log("Remove slot");
     const { googletag } = window;
     googletag.cmd.push(function () {
       googletag.destroySlots();
@@ -66,7 +60,6 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   };
 
   const onClickChapter = (chapterId: number) => {
-    console.log("eventRef.current", eventRef.current, rewardedAdRef.current);
     if (eventRef.current) {
       eventRef.current.makeRewardedVisible();
     }

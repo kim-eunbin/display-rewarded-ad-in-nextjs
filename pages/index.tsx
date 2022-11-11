@@ -14,13 +14,11 @@ const Home: NextPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   if (isLoading) {
-    console.log("in loading block");
     return <>loading...</>;
   }
 
   return (
     <>
-      {console.log("in index return")}
       <Head>
         <script
           async
