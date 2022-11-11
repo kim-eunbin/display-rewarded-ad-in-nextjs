@@ -11,6 +11,7 @@ const Advertisement = ({
   slotId: string;
 }) => {
   const rewardedAdRef = useRef<any>();
+  const timerRef = useRef<any>();
 
   useEffect(() => {
     if (!isTransition && typeof window !== undefined) {
@@ -30,6 +31,7 @@ const Advertisement = ({
             .pubads()
             .addEventListener("rewardedSlotReady", function (event: any) {
               console.log("event in rewardedSlotReady", event);
+              clearTimeout(timerRef.current);
               setIsLoading(false);
               event.makeRewardedVisible();
             });
@@ -64,14 +66,14 @@ const Advertisement = ({
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    timerRef.current = setTimeout(() => {
       console.log("refresh");
       const { googletag } = window;
       googletag.pubads().refresh([rewardedAdRef.current]);
     }, 2000);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timerRef.current);
     };
   });
 
