@@ -32,6 +32,7 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
           });
 
         googletag.pubads().addEventListener("rewardedSlotClosed", () => {
+          console.log("rewardedAdRef", rewardedAdRef);
           googletag.destroySlots([rewardedAdRef.current]);
         });
 
@@ -57,6 +58,7 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   }, [router.events]);
 
   const removeSlot = function () {
+    console.log("Remove slot");
     const { googletag } = window;
     googletag.cmd.push(function () {
       googletag.destroySlots();
@@ -64,7 +66,7 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   };
 
   const onClickChapter = (chapterId: number) => {
-    console.log(eventRef.current);
+    console.log("eventRef.current", eventRef.current, rewardedAdRef.current);
     if (eventRef.current) {
       eventRef.current.makeRewardedVisible();
     }
