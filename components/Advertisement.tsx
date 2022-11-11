@@ -15,6 +15,7 @@ const Advertisement = ({
 
   useEffect(() => {
     if (!isTransition && typeof window !== undefined) {
+      console.log("정의");
       const { googletag } = window;
       window.googletag = window.googletag || { cmd: [] };
 

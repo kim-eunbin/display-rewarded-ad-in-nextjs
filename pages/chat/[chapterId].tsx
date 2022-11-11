@@ -49,6 +49,7 @@ const ChatPage = () => {
              googletag.cmd = googletag.cmd || [];`}
         </script>
       </Head>
+      <button onClick={() => router.push("/")}>홈으로 가기</button>
       <Ad
         setIsLoading={setIsLoading}
         isTransition={isTransition}
