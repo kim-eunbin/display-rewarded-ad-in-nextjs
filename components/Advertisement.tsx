@@ -4,9 +4,11 @@ import { useRouter } from "next/router";
 const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   const router = useRouter();
   const rewardedAdRef = useRef<any>();
-  const watchAdButtonRef = useRef<any>();
   const modalRef = useRef<any>();
   const modalMessageRef = useRef<any>();
+  const chapterButtonRef = useRef<HTMLButtonElement>();
+  const selectedChapter = useRef<number>();
+  const eventRef = useRef<any>();
 
   useEffect(() => {
     const { googletag } = window;
@@ -24,19 +26,14 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
         googletag
           .pubads()
           .addEventListener("rewardedSlotReady", function (event: any) {
+            console.log("event in rewardedSlotReady", event);
             setIsLoading(false);
-            console.log("rewardedSlotReady", event);
-            watchAdButtonRef.current.onclick = function () {
-              event.makeRewardedVisible();
-              displayModal();
-            };
-
-            displayModal("reward", "Watch an ad to receive a special reward?");
+            eventRef.current = event;
           });
 
-        googletag
-          .pubads()
-          .addEventListener("rewardedSlotClosed", dismissRewardedAd);
+        googletag.pubads().addEventListener("rewardedSlotClosed", () => {
+          googletag.destroySlots([rewardedAdRef.current]);
+        });
 
         googletag
           .pubads()
@@ -44,18 +41,8 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
             console.log("rewardedSlotGranted", event);
             console.log("rewared", event.payload.amount, event.payload.type);
 
-            dismissRewardedAd();
-
-            var reward = event.payload;
-
-            displayModal(
-              "grant",
-              "You have been rewarded " +
-                reward.amount +
-                " " +
-                reward.type +
-                "!"
-            );
+            googletag.destroySlots([rewardedAdRef.current]);
+            router.push(`/chat/${selectedChapter.current}`);
           });
 
         googletag.enableServices();
@@ -78,44 +65,28 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
     });
   };
 
-  function dismissRewardedAd() {
-    const { googletag } = window;
-    console.log("rewardedSlotClosed");
-    displayModal();
-
-    googletag.destroySlots([rewardedAdRef.current]);
-  }
-
-  function displayModal(type?: string, message?: string) {
-    var modal = modalRef.current;
-    modal.removeAttribute("data-type");
-
-    if (type) {
-      modalMessageRef.current.textContent = message;
-      modal.setAttribute("data-type", type);
+  const onClickChapter = () => {
+    console.log(eventRef.current);
+    if (eventRef.current) {
+      eventRef.current.makeRewardedVisible();
     }
-  }
+  };
 
   return (
     <>
       <h1>Display rewarded ad in nextJS</h1>
-      <div id="modal" className="modal" ref={modalRef}>
-        <div className="modalDialog">
-          <p id="modalMessage" ref={modalMessageRef}></p>
-          <span className="grantButtons">
-            <input type="button" onClick={dismissRewardedAd} value="Close" />
-          </span>
-          <span className="rewardButtons">
-            <input
-              type="button"
-              id="watchAdButton"
-              value="Yes"
-              ref={watchAdButtonRef}
-            />
-            <input type="button" onClick={dismissRewardedAd} value="No" />
-          </span>
-        </div>
-      </div>
+      <button ref={chapterButtonRef} onClick={onClickChapter}>
+        1회차 클릭
+      </button>
+      <button ref={chapterButtonRef} onClick={onClickChapter}>
+        2회차 클릭
+      </button>
+      <button ref={chapterButtonRef} onClick={onClickChapter}>
+        3회차 클릭
+      </button>
+      <button ref={chapterButtonRef} onClick={onClickChapter}>
+        4회차 클릭
+      </button>
     </>
   );
 };
