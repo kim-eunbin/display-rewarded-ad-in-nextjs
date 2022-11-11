@@ -11,6 +11,8 @@ const ChatPage = () => {
   useEffect(() => {
     const startTransition = () => {
       const { googletag } = window;
+      console.log("destroy slot", googletag);
+
       googletag.cmd.push(function () {
         googletag.destroySlots();
       });

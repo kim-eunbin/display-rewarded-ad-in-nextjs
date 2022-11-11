@@ -58,12 +58,14 @@ const Advertisement = ({
   const removeSlot = function () {
     const { googletag } = window;
     googletag.cmd.push(function () {
+      console.log("destroy slot");
       googletag.destroySlots();
     });
   };
 
   useEffect(() => {
     const timer = setTimeout(() => {
+      console.log("refresh");
       const { googletag } = window;
       googletag.pubads().refresh([rewardedAdRef.current]);
     }, 2000);
