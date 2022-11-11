@@ -4,6 +4,9 @@ import { useRouter } from "next/router";
 const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   const router = useRouter();
   const rewardedAdRef = useRef<any>();
+  const watchAdButtonRef = useRef<any>();
+  const modalRef = useRef<any>();
+  const modalMessageRef = useRef<any>();
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,7 +27,7 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
           .addEventListener("rewardedSlotReady", function (event: any) {
             setIsLoading(false);
             console.log("rewardedSlotReady", event);
-            document.getElementById("watchAdButton").onclick = function () {
+            watchAdButtonRef.current.onclick = function () {
               event.makeRewardedVisible();
               displayModal();
             };
@@ -85,11 +88,11 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   }
 
   function displayModal(type?: string, message?: string) {
-    var modal = document.getElementById("modal");
+    var modal = modalRef.current;
     modal.removeAttribute("data-type");
 
     if (type) {
-      document.getElementById("modalMessage").textContent = message;
+      modalMessageRef.current.textContent = message;
       modal.setAttribute("data-type", type);
     }
   }
@@ -97,14 +100,19 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   return (
     <>
       <h1>Display rewarded ad in nextJS</h1>
-      <div id="modal" className="modal">
+      <div id="modal" className="modal" ref={modalRef}>
         <div className="modalDialog">
-          <p id="modalMessage"></p>
+          <p id="modalMessage" ref={modalMessageRef}></p>
           <span className="grantButtons">
             <input type="button" onClick={dismissRewardedAd} value="Close" />
           </span>
           <span className="rewardButtons">
-            <input type="button" id="watchAdButton" value="Yes" />
+            <input
+              type="button"
+              id="watchAdButton"
+              value="Yes"
+              ref={watchAdButtonRef}
+            />
             <input type="button" onClick={dismissRewardedAd} value="No" />
           </span>
         </div>
