@@ -43,6 +43,11 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
         googletag.display(rewardedAdRef.current);
       }
     });
+    console.log(googletag);
+
+    return () => {
+      removeSlot();
+    };
   }, []);
 
   const removeSlot = function () {
