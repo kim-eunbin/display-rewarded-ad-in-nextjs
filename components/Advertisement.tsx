@@ -47,8 +47,6 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
 
         googletag.enableServices();
         googletag.display(rewardedAdRef.current);
-
-        // googletag.pubads().refresh([rewardedSlot])
       }
     });
 
@@ -65,26 +63,27 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
     });
   };
 
-  const onClickChapter = () => {
+  const onClickChapter = (chapterId: number) => {
     console.log(eventRef.current);
     if (eventRef.current) {
       eventRef.current.makeRewardedVisible();
     }
+    selectedChapter.current = chapterId;
   };
 
   return (
     <>
       <h1>Display rewarded ad in nextJS</h1>
-      <button ref={chapterButtonRef} onClick={onClickChapter}>
+      <button ref={chapterButtonRef} onClick={() => onClickChapter(1)}>
         1회차 클릭
       </button>
-      <button ref={chapterButtonRef} onClick={onClickChapter}>
+      <button ref={chapterButtonRef} onClick={() => onClickChapter(2)}>
         2회차 클릭
       </button>
-      <button ref={chapterButtonRef} onClick={onClickChapter}>
+      <button ref={chapterButtonRef} onClick={() => onClickChapter(3)}>
         3회차 클릭
       </button>
-      <button ref={chapterButtonRef} onClick={onClickChapter}>
+      <button ref={chapterButtonRef} onClick={() => onClickChapter(4)}>
         4회차 클릭
       </button>
     </>
