@@ -9,7 +9,6 @@ const Advertisement = ({ setIsLoading }: { setIsLoading: any }) => {
   const modalMessageRef = useRef<any>();
 
   useEffect(() => {
-    setIsLoading(true);
     const { googletag } = window;
     window.googletag = window.googletag || { cmd: [] };
 
