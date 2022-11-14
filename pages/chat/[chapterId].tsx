@@ -46,7 +46,7 @@ const ChatPage = () => {
         </script>
       </Head>
       <h1>작품 플레이 화면</h1>
-      <button onClick={() => router.push("/")}>홈으로 가기</button>
+      <button onClick={() => router.push("/")}>돌아가기</button>
       <Ad
         onLoading={setIsLoading}
         isTransition={isTransition}
