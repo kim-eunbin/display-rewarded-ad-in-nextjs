@@ -1,21 +1,23 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
 const Advertisement = ({
-  setIsLoading,
+  onLoading,
   isTransition,
   slotId,
 }: {
-  setIsLoading: any;
+  onLoading: any;
   isTransition: boolean;
   slotId: string;
 }) => {
   const rewardedAdRef = useRef<any>();
-  const timerRef = useRef<any>();
+  const intervalTimerRef = useRef<any>();
+  const router = useRouter();
 
   useEffect(() => {
     if (!isTransition && typeof window !== undefined) {
-      console.log("정의");
+      onLoading(true);
+
       const { googletag } = window;
       window.googletag = window.googletag || { cmd: [] };
 
@@ -31,13 +33,13 @@ const Advertisement = ({
           googletag
             .pubads()
             .addEventListener("rewardedSlotReady", function (event: any) {
-              console.log("event in rewardedSlotReady", event);
-              clearTimeout(timerRef.current);
-              setIsLoading(false);
+              clearInterval(intervalTimerRef.current);
+              onLoading(false);
               event.makeRewardedVisible();
             });
 
           googletag.pubads().addEventListener("rewardedSlotClosed", () => {
+            router.push("/");
             removeSlot();
           });
 
@@ -52,37 +54,35 @@ const Advertisement = ({
         }
       });
     }
-
-    return () => {
-      removeSlot();
-    };
   }, [isTransition, slotId]);
 
   const removeSlot = function () {
     const { googletag } = window;
+
     googletag.cmd.push(function () {
-      console.log("destroy slot");
-      googletag.destroySlots();
+      googletag.destroySlots([rewardedAdRef.current]);
     });
   };
 
   useEffect(() => {
-    timerRef.current = setTimeout(() => {
-      console.log("refresh");
+    intervalTimerRef.current = setInterval(() => {
       const { googletag } = window;
+
       googletag.pubads().refresh([rewardedAdRef.current]);
+    }, 500);
+
+    const timerId = setTimeout(() => {
+      clearInterval(intervalTimerRef.current);
+      onLoading(false);
     }, 2000);
 
     return () => {
-      clearTimeout(timerRef.current);
+      clearInterval(intervalTimerRef.current);
+      clearTimeout(timerId);
     };
-  });
+  }, []);
 
-  return (
-    <>
-      <h1>Display rewarded ad in nextJS</h1>
-    </>
-  );
+  return <></>;
 };
 
 export default Advertisement;
